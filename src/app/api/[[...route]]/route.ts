@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { env } from "hono/adapter"
 import { handle } from "hono/vercel"
 
 export const runtime = "edge"
@@ -12,6 +13,9 @@ type EnvConfig = {
   }
 
 app.get('/search', (c) =>{
+
+
+    const {UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL} = env<EnvConfig> (c)
     return c.json({})
 })
 

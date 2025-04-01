@@ -16,6 +16,12 @@ app.get('/search', (c) =>{
 
 
     const {UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL} = env<EnvConfig> (c)
+
+    const redis =  new Redis({
+        token:UPSTASH_REDIS_REST_TOKEN,
+        url:UPSTASH_REDIS_REST_URL
+
+    })
     return c.json({})
 })
 

@@ -1,3 +1,4 @@
+import { Redis } from "@upstash/redis"
 import { Hono } from "hono"
 import { env } from "hono/adapter"
 import { handle } from "hono/vercel"
@@ -22,6 +23,9 @@ app.get('/search', (c) =>{
         url:UPSTASH_REDIS_REST_URL
 
     })
+
+
+    const query = c.req.query("q")
     return c.json({})
 })
 

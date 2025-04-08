@@ -26,6 +26,10 @@ app.get('/search', (c) =>{
 
 
     const query = c.req.query("q")
+
+    if(!query){
+        return c.json({message:"query is required"},{status:400})
+    }
     return c.json({})
 })
 

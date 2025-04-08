@@ -38,7 +38,13 @@ app.get('/search',async (c) =>{
         const temp = await redis.zrange<string[]>("terms", rank, rank +100)
 
         for (const el of temp){
+            if(!el.startsWith(query)){
+                break
+            }
 
+            if(el.endsWith("*")){
+                res.push(el.substring(0,el.length - 1))
+            }
         }
     }
     return c.json({})

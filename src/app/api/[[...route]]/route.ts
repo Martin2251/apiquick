@@ -13,7 +13,7 @@ type EnvConfig = {
     UPSTASH_REDIS_REST_URL: string
   }
 
-app.get('/search', (c) =>{
+app.get('/search',async (c) =>{
 
 
     const {UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL} = env<EnvConfig> (c)
@@ -29,6 +29,13 @@ app.get('/search', (c) =>{
 
     if(!query){
         return c.json({message:"query is required"},{status:400})
+    }
+
+    const res = []
+    const rank = await redis.zrank("terms", query)
+
+    if (rank !== null && rank !== undefined){
+        const temp = await redis.zrange("terms", rank, rank +100)
     }
     return c.json({})
 })

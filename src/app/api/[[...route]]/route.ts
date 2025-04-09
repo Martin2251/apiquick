@@ -48,6 +48,8 @@ app.get('/search',async (c) =>{
             }
         }
     }
+
+    const end = performance.now()
     return c.json({})
 })
 

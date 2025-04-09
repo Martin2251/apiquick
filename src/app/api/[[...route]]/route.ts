@@ -15,42 +15,58 @@ type EnvConfig = {
 
 app.get('/search',async (c) =>{
 
-
-    const {UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL} = env<EnvConfig> (c)
-    const start = performance.now()
-
-    const redis =  new Redis({
-        token:UPSTASH_REDIS_REST_TOKEN,
-        url:UPSTASH_REDIS_REST_URL
-
-    })
-
-
-    const query = c.req.query("q")
-
-    if(!query){
-        return c.json({message:"query is required"},{status:400})
-    }
-
-    const res = []
-    const rank = await redis.zrank("terms", query)
-
-    if (rank !== null && rank !== undefined){
-        const temp = await redis.zrange<string[]>("terms", rank, rank +100)
-
-        for (const el of temp){
-            if(!el.startsWith(query)){
-                break
-            }
-
-            if(el.endsWith("*")){
-                res.push(el.substring(0,el.length - 1))
+    try {
+        const {UPSTASH_REDIS_REST_TOKEN,UPSTASH_REDIS_REST_URL} = env<EnvConfig> (c)
+        const start = performance.now()
+    
+        const redis =  new Redis({
+            token:UPSTASH_REDIS_REST_TOKEN,
+            url:UPSTASH_REDIS_REST_URL
+    
+        })
+    
+    
+        const query = c.req.query("q")
+    
+        if(!query){
+            return c.json({message:"query is required"},{status:400})
+        }
+    
+        const res = []
+        const rank = await redis.zrank("terms", query)
+    
+        if (rank !== null && rank !== undefined){
+            const temp = await redis.zrange<string[]>("terms", rank, rank +100)
+    
+            for (const el of temp){
+                if(!el.startsWith(query)){
+                    break
+                }
+    
+                if(el.endsWith("*")){
+                    res.push(el.substring(0,el.length - 1))
+                }
             }
         }
+    
+        const end = performance.now()
+        return c.json({
+            results: res,
+            duration :end - start,
+        })
+        
+    } catch (err) {
+        console.error(err)
+        return c.json(
+            {results:[], message:"something went wrong"},
+            {
+                status:500,
+            }
+        )
     }
 
-    const end = performance.now()
-    return c.json({})
+
+   
 })
 
 // compatable with next 

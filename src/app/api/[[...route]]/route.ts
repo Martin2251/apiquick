@@ -26,7 +26,7 @@ app.get('/search',async (c) =>{
         })
     
     
-        const query = c.req.query("q")
+        const query = c.req.query("q")?.toUpperCase()
     
         if(!query){
             return c.json({message:"query is required"},{status:400})
@@ -50,13 +50,17 @@ app.get('/search',async (c) =>{
         }
     
         const end = performance.now()
+        console.log("hiii")
+        console.log(res,"")
         return c.json({
             results: res,
             duration :end - start,
         })
+       
         
     } catch (err) {
         console.error(err)
+        console.log("hi")
         return c.json(
             {results:[], message:"something went wrong"},
             {

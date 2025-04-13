@@ -20,12 +20,12 @@ const Home = () => {
     fetchData()
   },[input])
   return (
-  <div>
+  <main className='h-screen w-screen grainy '>
    <p>hi</p>
     <input type="text" value={input} onChange={(e) =>{
       setInput(e.target.value) 
     }} style={{border:"2px solid green"}} className='text-zinc-900' />
-  </div>
+    </main>
   )
 }
 

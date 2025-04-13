@@ -21,7 +21,7 @@ const Home = () => {
   },[input])
   return (
   <main className='h-screen w-screen grainy '>
-   <p>hi</p>
+  <div className='flex flex-col gap-6 items-center pt-32 duration-500'></div>
     <input type="text" value={input} onChange={(e) =>{
       setInput(e.target.value) 
     }} style={{border:"2px solid green"}} className='text-zinc-900' />
